@@ -1,0 +1,7 @@
+
+class Profile(object):
+
+    def __init__ (self):
+    self.nic = nic
+    self.name = name
+    self.password = password
