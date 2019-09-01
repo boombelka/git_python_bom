@@ -51,7 +51,7 @@ class Profile(object):
     def __init__ (self, nic, name, password):
         self.nic = nic is str
         self.name = name is str
-        self.password = password
+        self.password = password is str
 
 
 class Territory:
@@ -150,8 +150,57 @@ def generation_territory(list_territory):
         arr.append(item)
     return (arr)
 
+def save_game():
+    pass
+
+
+def menu_personage():
+    nicname = input('Напишите ваше логин')
+    name = input('Введите ваш пароль')
+    password = input('Введите ваш пароль')
+    while True
+        pers = input('Кем вы хотите играть? 1 - Маг, 2 - Воин')
+        if pers == 1:
+            print(f'Вы выбрали МАГА. Добро пожаловать в братство')
+            break
+        elif pers == 2:
+            print(f'Вы выбрали ВОИНА. Добро пожаловать в гильдию Воинов')
+            break
+        else:
+            print('Вы неправильно выбрали персонаж')
+            continue
+    user = Profile(nicname, name, password, pers)
+
+def menu():
+    print(f'[1] - Заполнить профиль пользователя')
+    print(f'[2] - Начать игру')
+    print(f'[3] - Сохранить игру')
+    print(f'[4] - Загрузить игру')
+    print(f'[5] - Выйти из игры')
+    x = input('Выберите действие')
+        if 0 =< x >= 5:
+            if x == 1:
+                menu_personage()
+            elif x == 2:
+                pass
+            elif x == 3:
+                save_game()
+            elif x == 4:
+                load_game()
+            else:
+                exit_marker = input('Вы действительно хотите закончить игру ДА? (Да/Нет)').lower()
+                if exit_marker == 'да'
+                    print('До свидания, до скорых встреч')
+                    os.exit()
+                elif exit_marker == 'нет'
+                    continue
+                else:
+                    print('Вы неправильно ответили на вопрос - попробуйте еще.')
+                    continue
+            continue
+
 # отрисовка карты
-#
+# Не могу нормально добавить объекты lot и person - вернее не могу их запрашивать и делать с ними какие либо действия.
 def global_map(map):
     for i in range(0, 10):
         print('---|---|---|---|---|---|---|---|---|---|')
@@ -163,22 +212,17 @@ def global_map(map):
 #palyers = []
 #gameover = False
 #while gameover is not False:
-#    menu()
 while True
 # Создаем список территорий, из которых будет составлена карта
 
+    menu()
     #map = []
     complect_teritory()
     map = generation_territory(title)
     global_map(map)
 
-
-#print(sos)
-
-
-
-
 # Сохранение нерабочее
+# не видит lot, person при сохранении в словари объектов вложенных в объект map[]
 #for i in range(0, 99):
 #cl = map[1]
 #cl_1 = map[1]
