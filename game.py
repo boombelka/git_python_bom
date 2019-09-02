@@ -48,10 +48,11 @@ class Warrior(object):
         pass
 
 class Profile(object):
-    def __init__ (self, nic, name, password):
+    def __init__ (self, nic, name, password, pers):
         self.nic = nic is str
         self.name = name is str
         self.password = password is str
+        self.pers = object
 
 
 class Territory:
@@ -73,11 +74,11 @@ class Water(Territory):
 
 
 class Field(Territory):
-    def __init__(self, shield= 0, impassability= 0):
+    def __init__(self, shield= 0, impassability= 1):
         Territory.__init__(shield, impassability, lot= None, person= None)
         self.impassability = 1
 
-    def __str__(self):
+    def __str__(self):2
         return(f' = ')
 
 
@@ -131,7 +132,7 @@ class FieldAlebarda(Territory):
         return(f' =(')
 
 # собираем список всех типов территорий для генерации карты
-def complect_teritory()
+def complect_teritory():
     title = []
     title.append(Water())
     title.append(Field())
@@ -158,27 +159,32 @@ def menu_personage():
     nicname = input('Напишите ваше логин')
     name = input('Введите ваш пароль')
     password = input('Введите ваш пароль')
-    while True
-        pers = input('Кем вы хотите играть? 1 - Маг, 2 - Воин')
-        if pers == 1:
+    while True:
+        hero = int(input('Кем вы хотите играть? 1 - Маг, 2 - Воин').lower())
+        if hero == 1:
             print(f'Вы выбрали МАГА. Добро пожаловать в братство')
+            pers = Mage
             break
-        elif pers == 2:
+        elif hero == 2:
             print(f'Вы выбрали ВОИНА. Добро пожаловать в гильдию Воинов')
+            pers = Warrior()
             break
         else:
             print('Вы неправильно выбрали персонаж')
             continue
     user = Profile(nicname, name, password, pers)
+    return(user)
 
 def menu():
-    print(f'[1] - Заполнить профиль пользователя')
-    print(f'[2] - Начать игру')
-    print(f'[3] - Сохранить игру')
-    print(f'[4] - Загрузить игру')
-    print(f'[5] - Выйти из игры')
-    x = input('Выберите действие')
-        if 0 =< x >= 5:
+    while True:
+        print(f'[1] - Заполнить профиль пользователя')
+        print(f'[2] - Начать игру')
+        print(f'[3] - Сохранить игру')
+        print(f'[4] - Загрузить игру')
+        print(f'[5] - Вернуться в игру')
+        print(f'[6] - Выйти из игры')
+        x = (int(input('Выберите действие').lower()))
+        if 0 < x < 7:
             if x == 1:
                 menu_personage()
             elif x == 2:
@@ -187,17 +193,19 @@ def menu():
                 save_game()
             elif x == 4:
                 load_game()
+            elif x == 5:
+                break
             else:
                 exit_marker = input('Вы действительно хотите закончить игру ДА? (Да/Нет)').lower()
-                if exit_marker == 'да'
+                if exit_marker == 'да':
                     print('До свидания, до скорых встреч')
                     os.exit()
-                elif exit_marker == 'нет'
-                    continue
+                elif exit_marker == 'нет':
+                    print('Мы рады, что вы передумали')
                 else:
                     print('Вы неправильно ответили на вопрос - попробуйте еще.')
-                    continue
-            continue
+        else:
+            print('Вы очень неправильно ответили на вопрос - попробуйте еще.')
 
 # отрисовка карты
 # Не могу нормально добавить объекты lot и person - вернее не могу их запрашивать и делать с ними какие либо действия.
@@ -208,11 +216,14 @@ def global_map(map):
     print('---|---|---|---|---|---|---|---|---|---|')
 
 
+def begin_name(user):
+    print(f'В нелегкое время появились вы в этой дальней стране, {user}')
+
 
 #palyers = []
 #gameover = False
 #while gameover is not False:
-while True
+while True:
 # Создаем список территорий, из которых будет составлена карта
 
     menu()
