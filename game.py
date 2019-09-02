@@ -4,39 +4,39 @@ import random as r
 
 class inventory(object):
     def __init__(self, wegth= 0, size = 0, lvl= 0):
-        self.wegth : int
-        self.size: int
-        self.lvl : int
+        self.wegth = wegth
+        self.size = size
+        self.lvl = lvl
 
 class Migth(inventory):
     def __init__(self, wegth= 5, size= 3, lvl= 40 ):
-        inventory.__init__(wegth, size, lvl)
+        inventory.__init__(self, wegth, size, lvl)
 
 
 class Alebard(inventory):
     def __init__(self, wegth= 7, size= 5, lvl= 50 ):
-        inventory.__init__(wegth, size, lvl)
+        inventory.__init__(self, wegth, size, lvl)
 
 
 class Stick(inventory):
     def __init__(self, wegth= 3, size= 5, lvl= 50 ):
-        inventory.__init__(wegth, size, lvl)
+        inventory.__init__(self, wegth, size, lvl)
 
 
 class Rubin(inventory):
     def __init__(self, wegth= 1, size= 1, lvl= 0 ):
-        inventory.__init__(wegth, size, lvl)
+        inventory.__init__(self, wegth, size, lvl)
 
 
 class Coin(inventory):
     def __init__(self, wegth= 1, size= 1, lvl= 0 ):
-        inventory.__init__(wegth, size, lvl)
+        inventory.__init__(self, wegth, size, lvl)
 
 class Creature(object):
     def __init__(self):
-        self.po : int
-        self.hp : int
-        self.intelligence : int
+        self.po = po
+        self.hp = hp
+        self.intelligence = intelligence
 
 
 class Mage(object):
@@ -54,20 +54,26 @@ class Profile(object):
         self.password = password is str
         self.pers = object
 
+    def __str__(self):
+        print(f'Имя {self.name}')
+        print(f'Имя {self.nic}')
+        # добавить сюда шифрование
+        print(f'Имя {self.password}')
+        print(f'Имя {self.pers}')
 
 class Territory:
     def __init__(self, shield= 0, impassability= 0, lot = None, person= None):
-        self.impassability :int
-        self.shield : int
-        self.lot : object
-        self.person : object
+        self.impassability = impassability
+        self.shield = shield
+        self.lot = lot
+        self.person = person
 
     def __str__(self):
         return(' X ')
 
 class Water(Territory):
     def __init__(self, shield= 0, impassability= 0):
-        Territory.__init__(shield, impassability)
+        Territory.__init__(self, shield, impassability)
 
     def __str__(self):
         return f' ~ '
@@ -75,16 +81,16 @@ class Water(Territory):
 
 class Field(Territory):
     def __init__(self, shield= 0, impassability= 1):
-        Territory.__init__(shield, impassability, lot= None, person= None)
+        Territory.__init__(self, shield, impassability, lot= None, person= None)
         self.impassability = 1
 
-    def __str__(self):2
+    def __str__(self):
         return(f' = ')
 
 
 class FieldCoin(Territory):
     def __init__(self, shield= 0, impassability= 0):
-        Territory.__init__(shield, impassability, lot= None, person= None)
+        Territory.__init__(self, shield, impassability, lot= None, person= None)
         self.impassability = 1
         self.lot = Coin()
 
@@ -94,7 +100,7 @@ class FieldCoin(Territory):
 
 class FieldRubin(Territory):
     def __init__(self, shield= 0, impassability= 0):
-        Territory.__init__(shield, impassability, lot= None, person= None)
+        Territory.__init__(self, shield, impassability, lot= None, person= None)
         self.impassability = 1
         self.lot = Rubin()
 
@@ -104,7 +110,7 @@ class FieldRubin(Territory):
 
 class FieldMight(Territory):
     def __init__(self, shield= 0, impassability= 0):
-        Territory.__init__(shield, impassability, lot= None, person= None)
+        Territory.__init__(self, shield, impassability, lot= None, person= None)
         self.impassability = 1
         self.lot = Migth()
 
@@ -114,7 +120,7 @@ class FieldMight(Territory):
 
 class FieldStick(Territory):
     def __init__(self, shield= 0, impassability= 0):
-        Territory.__init__(shield, impassability, lot= None, person= None)
+        Territory.__init__(self, shield, impassability, lot= None, person= None)
         self.impassability = 1
         self.lot = Stick()
 
@@ -124,16 +130,16 @@ class FieldStick(Territory):
 
 class FieldAlebarda(Territory):
     def __init__(self, shield= 0, impassability= 0):
-        Territory.__init__(shield, impassability, lot= None, person= None)
+        Territory.__init__(self, shield, impassability, lot= None, person= None)
         self.impassability = 1
         self.lot = Alebard()
 
     def __str__(self):
         return(f' =(')
 
+
 # собираем список всех типов территорий для генерации карты
-def complect_teritory():
-    title = []
+def complect_teritory(title):
     title.append(Water())
     title.append(Field())
     title.append(FieldAlebarda())
@@ -155,28 +161,34 @@ def save_game():
     pass
 
 
-def menu_personage():
-    nicname = input('Напишите ваше логин')
-    name = input('Введите ваш пароль')
-    password = input('Введите ваш пароль')
+def menu_personage(user):
+    user.nicname = input('Напишите ваш логин')
+    user.name = input('Введите ваше имя')
+    user.password = input('Введите ваш пароль')
     while True:
         hero = int(input('Кем вы хотите играть? 1 - Маг, 2 - Воин').lower())
         if hero == 1:
             print(f'Вы выбрали МАГА. Добро пожаловать в братство')
-            pers = Mage
+            user.pers = Mage
             break
         elif hero == 2:
             print(f'Вы выбрали ВОИНА. Добро пожаловать в гильдию Воинов')
-            pers = Warrior()
+            user.pers = Warrior()
             break
         else:
             print('Вы неправильно выбрали персонаж')
             continue
-    user = Profile(nicname, name, password, pers)
+    print(f'Проверьте вашу учетную запись')
+    print(user)
     return(user)
 
-def menu():
-    while True:
+
+
+
+
+def menu(user, title):
+    i = True
+    while i == True:
         print(f'[1] - Заполнить профиль пользователя')
         print(f'[2] - Начать игру')
         print(f'[3] - Сохранить игру')
@@ -186,9 +198,11 @@ def menu():
         x = (int(input('Выберите действие').lower()))
         if 0 < x < 7:
             if x == 1:
-                menu_personage()
+                menu_personage(user)
             elif x == 2:
-                pass
+                begin_game(user, title)
+                i = False
+                break
             elif x == 3:
                 save_game()
             elif x == 4:
@@ -206,7 +220,7 @@ def menu():
                     print('Вы неправильно ответили на вопрос - попробуйте еще.')
         else:
             print('Вы очень неправильно ответили на вопрос - попробуйте еще.')
-
+    return(user, title)
 # отрисовка карты
 # Не могу нормально добавить объекты lot и person - вернее не могу их запрашивать и делать с ними какие либо действия.
 def global_map(map):
@@ -215,20 +229,26 @@ def global_map(map):
         print(f'{map[i]}|{map[i + 1]}|{map[i + 2]}|{map[i + 3]}|{map[i + 4]}|{map[i + 5]}|{map[i + 6]}|{map[i + 7]}|{map[i + 8]}|{map[i + 9]}')
     print('---|---|---|---|---|---|---|---|---|---|')
 
+# Модуль отслеживания позиции на карте и хода игрока
+def move_position():
+    pass
 
-def begin_name(user):
+# Модуль начала игры (генерит начальную карту)
+def begin_game(user, title):
     print(f'В нелегкое время появились вы в этой дальней стране, {user}')
+    title = complect_teritory(title)
+    return title
 
 
 #palyers = []
 #gameover = False
 #while gameover is not False:
+# Начало игры
 while True:
-# Создаем список территорий, из которых будет составлена карта
-
-    menu()
-    #map = []
-    complect_teritory()
+    title = []
+    user = Profile
+    menu(user, title)
+    # отрисовка карты из массива
     map = generation_territory(title)
     global_map(map)
 
