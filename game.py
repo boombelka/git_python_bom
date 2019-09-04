@@ -1,6 +1,7 @@
 import json
 import menu
 import random as r
+load os
 
 class inventory(object):
     def __init__(self, wegth= 0, size = 0, lvl= 0):
@@ -47,6 +48,12 @@ class Warrior(object):
     def __init__(self):
         pass
 
+
+class ProfileData(object):
+    def __init__(self, *args):
+        pass
+
+
 class Profile(object):
     def __init__ (self, nic, name, password, pers):
         self.nic = nic is str
@@ -60,6 +67,12 @@ class Profile(object):
         # добавить сюда шифрование
         print(f'Имя {self.password}')
         print(f'Имя {self.pers}')
+
+    def error(self):
+        err_nic = f'Нет такого ника'
+        err_name = f'Нет такого имени'
+        err_passw = f'Неверный пароль'
+        err_pers = f'Нет такого персонажа'
 
 class Territory:
     def __init__(self, shield= 0, impassability= 0, lot = None, person= None):
@@ -138,6 +151,18 @@ class FieldAlebarda(Territory):
         return(f' =(')
 
 
+class GameBoard(object):
+    def __init__(self):
+        pass
+    def generator_gameboard(self):
+        pass
+
+
+class LoadData(object):
+    def __init__(self):
+        pass
+
+
 # собираем список всех типов территорий для генерации карты
 def complect_teritory(title):
     title.append(Water())
@@ -160,7 +185,7 @@ def generation_territory(list_territory):
 def save_game():
     pass
 
-
+'''
 def menu_personage(user):
     user.nicname = input('Напишите ваш логин')
     user.name = input('Введите ваше имя')
@@ -182,7 +207,7 @@ def menu_personage(user):
     print(user)
     return(user)
 
-
+'''
 
 
 
@@ -240,17 +265,56 @@ def begin_game(user, title):
     return title
 
 
+class Menu(object):
+    def __init__(self, x= 0):
+        self.x = x
+    def stand_menu(self):
+        print(f'[1] - Заполнить профиль пользователя')
+        print(f'[2] - Начать игру')
+        print(f'[3] - Сохранить игру')
+        print(f'[4] - Загрузить игру')
+        print(f'[5] - Вернуться в игру')
+        print(f'[6] - Выйти из игры')
+        x = (int(input('Выберите действие').lower()))
+        if x == 1:
+            self.data_user()
+        elif x == 2:
+            pass
+        elif x == 3:
+            self.save()
+        elif x == 4:
+            self.load()
+        elif x == 6:
+            os.exit
+        return(x)
+
+    def data_user(self):
+
+        input(f'Введите пожалуйста ваш ник')
+        if
+    def save(self):
+        pass
+    def load(self):
+        pass
+    def gameover(self):
+        pass
+    def error(self):
+        print(f'Вы выбрали неуществующий пункт. Попробуйте еще раз')
+
 #palyers = []
 #gameover = False
 #while gameover is not False:
 # Начало игры
 while True:
-    title = []
-    user = Profile
-    menu(user, title)
+#    title = []
+#    user = Profile
+#    menu(user, title)
     # отрисовка карты из массива
-    map = generation_territory(title)
-    global_map(map)
+#    map = generation_territory(title)
+#    global_map(map)
+    x = 0
+    Menu(x).stand_menu()
+
 
 # Сохранение нерабочее
 # не видит lot, person при сохранении в словари объектов вложенных в объект map[]
@@ -263,8 +327,24 @@ while True:
 #with open('data.txt', 'w', encoding='UTF-8') as file:
  #   file.write(results)
 
+'''
+1511115111
+1131113111
+1111315111
+1161111311
+2221211111
+1111222222
+1164111311
+1141171111
+1113111311
+1914118111
+
+ '''
+
 
 if __name__ == "__main__":
     print('Запущена вручную')
 else:
     ('Запущена автоматически')
+
+
