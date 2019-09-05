@@ -1,7 +1,8 @@
 import json
-import menu
+#import menu
 import random as r
-load os
+import os
+
 
 class inventory(object):
     def __init__(self, wegth= 0, size = 0, lvl= 0):
@@ -163,29 +164,8 @@ class LoadData(object):
         pass
 
 
-# собираем список всех типов территорий для генерации карты
-def complect_teritory(title):
-    title.append(Water())
-    title.append(Field())
-    title.append(FieldAlebarda())
-    title.append(FieldCoin())
-    title.append(FieldMight())
-    title.append(FieldRubin())
-    title.append(FieldStick())
-    return title
 
-# генерация карты со всеми сокровищами
-def generation_territory(list_territory):
-    arr = []
-    for i in range(1, 100):
-        item = r.choice(list_territory)
-        arr.append(item)
-    return (arr)
 
-def save_game():
-    pass
-
-'''
 def menu_personage(user):
     user.nicname = input('Напишите ваш логин')
     user.name = input('Введите ваше имя')
@@ -207,7 +187,7 @@ def menu_personage(user):
     print(user)
     return(user)
 
-'''
+
 
 
 
@@ -231,7 +211,7 @@ def menu(user, title):
             elif x == 3:
                 save_game()
             elif x == 4:
-                load_game()
+                Menu.load()
             elif x == 5:
                 break
             else:
@@ -264,6 +244,9 @@ def begin_game(user, title):
     title = complect_teritory(title)
     return title
 
+def obj_to_dict(obj):
+   return obj.__dict__
+
 
 class Menu(object):
     def __init__(self, x= 0):
@@ -284,62 +267,35 @@ class Menu(object):
             self.save()
         elif x == 4:
             self.load()
+        elif x == 5:
+            global_map(map)
         elif x == 6:
             os.exit
         return(x)
 
     def data_user(self):
-
         input(f'Введите пожалуйста ваш ник')
-        if
+
     def save(self):
-        pass
+        with open('data.txt', 'w') as f:
+            for i in range(0, 99):
+                m = map[i]
+                json_string = json.dumps(m.__dict__,  default = obj_to_dict)
+                f.writelines(json_string)
+
     def load(self):
-        pass
+
+        with open("data.txt", "r") as f:
+            for i in range(0, 99):
+                map[i] = json.load(f)
+                f.close()
     def gameover(self):
         pass
     def error(self):
         print(f'Вы выбрали неуществующий пункт. Попробуйте еще раз')
 
-#palyers = []
-#gameover = False
-#while gameover is not False:
-# Начало игры
-while True:
-#    title = []
-#    user = Profile
-#    menu(user, title)
-    # отрисовка карты из массива
-#    map = generation_territory(title)
-#    global_map(map)
-    x = 0
-    Menu(x).stand_menu()
 
 
-# Сохранение нерабочее
-# не видит lot, person при сохранении в словари объектов вложенных в объект map[]
-#for i in range(0, 99):
-#cl = map[1]
-#cl_1 = map[1]
-#result = json.dumps(cl.__dict__)
-#print(result)
-
-#with open('data.txt', 'w', encoding='UTF-8') as file:
- #   file.write(results)
-
-'''
-1511115111
-1131113111
-1111315111
-1161111311
-2221211111
-1111222222
-1164111311
-1141171111
-1113111311
-1914118111
-
- '''
 
 
 if __name__ == "__main__":
