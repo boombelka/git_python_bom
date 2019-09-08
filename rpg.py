@@ -1,7 +1,7 @@
 import pickle
 import random as r
 from user import User
-from territory import complectteritory, Mountin, Water
+from territory import complectteritory, Mountin, Water, Field, FieldMigth, FieldRubin, FieldCoin, Forest
 import os
 #Классы персонажей
 
@@ -95,9 +95,10 @@ class Error(object):
 
 # Класс перемещения героя по карте
 class HeroCoordinate(object):
-    def __init__(self, x=10, y=10):
+    def __init__(self, x=10, y=10, inventar_=[]):
         self.x = x
         self.y = y
+        self.inventar_ = inventar_
 
     def coord_x(self):
         return(self.x)
@@ -106,10 +107,7 @@ class HeroCoordinate(object):
         return(self.y)
 
     def step(self):
-        print('Управление:')
-        print('i - инвентарь')
-        print('t - применить трубу')
-        st = input('Куда вы пойдете w,s,a,d')
+        st = input('Куда вы пойдете w,s,a,d\n')
         if st == 'w':
             if type(map_new[self.x][self.y + 1]) == type(Water()) or type(map_new[self.x][self.y + 1]) == type(Mountin()):
                 print('**********************')
@@ -174,17 +172,32 @@ class GameProccess(object):
         self.map = map
         s = 'XXX'
         Hero = ' H '
-
+        if type(map_new[x][y]) == type(Forest()):
+            terrain = Forest().terranian
+            godsend = Forest().godsend
+        elif type(map_new[x][y]) == type(Field()):
+            terrain = Field().terranian
+            godsend = Field().godsend
+        elif type(map_new[x][y]) == type(FieldCoin()):
+            terrain = FieldCoin().terranian
+            godsend = FieldCoin().godsend
+        elif type(map_new[x][y]) == type(FieldMigth()):
+            terrain = FieldMigth().terranian
+            godsend = FieldMigth().godsend
+        else:
+            terrain = ''
+            godsend = ''
 
         print('******************************************************')
         print('        КАРТА                        УПРАВЛЕНИЕ        ')
         print(' --------------                   w,s,a,d - ходьба     ')
-        print(f' |{map[x - 1][y + 1]}|{map[x][y + 1]}|{map[x + 1][y + 1]}                                                        ')
-        print(f' |{map[x - 1][y]}|{Hero}|{map[x + 1][y]}                             ')
+        print(f' |{map[x - 1][y + 1]}|{map[x][y + 1]}|{map[x + 1][y + 1]}                     menu - Меню                                       ')
+        print(f' |{map[x - 1][y]}|{Hero}|{map[x + 1][y]}                   o - подобрать находку                           ')
         print(f' |{map[x - 1][y - 1]}|{map[x][y - 1]}|{map[x + 1][y - 1]}                              ')
         print(f'                                                     ')
         print(f'  Инвентарь:                                          ')
         print(f'  Текущие координаты {x}, {y}                         ')
+        print(f'  Территория: {terrain}, под ногами: {godsend}                                                  ')
         print(f' *****************************************************')
 
     def cls(self):

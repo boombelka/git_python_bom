@@ -1,0 +1,10 @@
+{
+    "nic": "user",
+    "name": "user",
+    "password": "1",
+    "pers": {
+        "power": 3,
+        "hitpoint": 5,
+        "magpower": 10
+    }
+}

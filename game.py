@@ -56,7 +56,7 @@ class ProfileData(object):
 
 
 class Profile(object):
-    def __init__ (self, nic, name, password, pers):
+    def __init__ (self, nic, name, password):
         self.nic = nic is str
         self.name = name is str
         self.password = password is str
@@ -151,21 +151,6 @@ class FieldAlebarda(Territory):
     def __str__(self):
         return(f' =(')
 
-
-class GameBoard(object):
-    def __init__(self):
-        pass
-    def generator_gameboard(self):
-        pass
-
-
-class LoadData(object):
-    def __init__(self):
-        pass
-
-
-
-
 def menu_personage(user):
     user.nicname = input('Напишите ваш логин')
     user.name = input('Введите ваше имя')
@@ -228,11 +213,7 @@ def menu(user, title):
     return(user, title)
 # отрисовка карты
 # Не могу нормально добавить объекты lot и person - вернее не могу их запрашивать и делать с ними какие либо действия.
-def global_map(map):
-    for i in range(0, 10):
-        print('---|---|---|---|---|---|---|---|---|---|')
-        print(f'{map[i]}|{map[i + 1]}|{map[i + 2]}|{map[i + 3]}|{map[i + 4]}|{map[i + 5]}|{map[i + 6]}|{map[i + 7]}|{map[i + 8]}|{map[i + 9]}')
-    print('---|---|---|---|---|---|---|---|---|---|')
+
 
 # Модуль отслеживания позиции на карте и хода игрока
 def move_position():
