@@ -1,8 +1,8 @@
-import json
-import random as r
 import pickle
+import random as r
 from user import User
-import globalmap
+from territory import complectteritory, Mountin, Water
+import os
 #Классы персонажей
 
 class GlobalMap(object):
@@ -13,13 +13,16 @@ class GlobalMap(object):
         self.map = map
         self.title = title
 
-        for j in range(11):
+        for j in range(101):
             d2 = []
-            for i in range(10):
-                item = random.choice(complect_teritory())
+            for i in range(100):
+                if j == 100 or j == 0 or i == 0 or i == 100:
+                    item = Mountin()
+                else:
+                    item = r.choice(title)
                 d2.append(item)
             self.map.append(d2)
-            return (self.map)
+        return (self.map)
 
     def print_map(self):
         for i in range(0, 10):
@@ -92,7 +95,7 @@ class Error(object):
 
 # Класс перемещения героя по карте
 class HeroCoordinate(object):
-    def __init__(self, x=0, y=0):
+    def __init__(self, x=10, y=10):
         self.x = x
         self.y = y
 
@@ -104,20 +107,46 @@ class HeroCoordinate(object):
 
     def step(self):
         print('Управление:')
-        print()
+        print('i - инвентарь')
+        print('t - применить трубу')
         st = input('Куда вы пойдете w,s,a,d')
         if st == 'w':
-            self.y = self.y + 1
+            if type(map_new[self.x][self.y + 1]) == type(Water()) or type(map_new[self.x][self.y + 1]) == type(Mountin()):
+                print('**********************')
+                print('Туда нельзя идти ТОПЬ или ПРОПАСТЬ')
+                print('**********************')
+            else:
+                self.y = self.y + 1
+
         elif st == 's':
-            self.y = self.y - 1
+            if type(map_new[self.x][self.y - 1]) == type(Water()) or type(map_new[self.x][self.y - 1]) == type(Mountin()):
+                print('**********************')
+                print('Туда нельзя идти ТОПЬ или ПРОПАСТЬ')
+                print('**********************')
+            else:
+                self.y = self.y - 1
 
         elif st == 'a':
-            self.x = self.x - 1
+            if type(map_new[self.x -1][self.y]) == type(Water()) or type(map_new[self.x - 1][self.y]) == type(Mountin()):
+                print('**********************')
+                print('Туда нельзя идти ТОПЬ или ПРОПАСТЬ')
+                print('**********************')
+            else:
+                self.x = self.x - 1
 
         elif st == 'd':
-            self.x = self.x + 1
+            if type(map_new[self.x + 1][self.y]) == type(Water()) or type(map_new[self.x + 1][self.y]) == type(Mountin()):
+                print('**********************')
+                print('Туда нельзя идти ТОПЬ или ПРОПАСТЬ')
+                print('**********************')
+            else:
+                self.x = self.x + 1
 
-# Классы инвентаря
+        elif st == 'menu':
+            Menu().stand_menu()
+
+
+# Классы обработки событий
 class GameProccess(object):
     def __init__(self):
         pass
@@ -134,35 +163,54 @@ class GameProccess(object):
         print('Что делаем?')
         return ()
 
-    def begin_game(self, map_new_gl):
+    def begin_game(self, map_new_gl, listterritor):
+        self.listterritor = listterritory
         self.map_new_gl = map_new_gl
-        map_new_gl = GlobalMap().generate_new_map(map_new)
 
+        map_new_gl = GlobalMap(map_new).generate_new_map(map_new, listterritor)
+        return (map_new_gl)
 
-    def interface(self, map):
+    def interface(self, map, x ,y):
         self.map = map
+        s = 'XXX'
+        Hero = ' H '
+
+
         print('******************************************************')
-        print('        КАРТА                        ИНВЕНТАРЬ        ')
-        print(' --------------    [{}]                               ')
-        print(f' |{map[Hero_coordinate().coord_x()-1][Hero_coordinate().coord_y()+1]}|{map[Hero_coordinate().coord_x()][Hero_coordinate().coord_y()+1]}|{map[Hero_coordinate().coord_x()+1][Hero_coordinate().coord_y()+1]}                                                        ')
-        print(f' |{map[Hero_coordinate().coord_x()-1][Hero_coordinate().coord_y()]}|{map[Hero_coordinate().coord_x()][Hero_coordinate().coord_y()]}|{[Hero_coordinate().coord_x()+1][Hero_coordinate().coord_y()]}                             ')
-        print(f' |{map[Hero_coordinate().coord_x()-1][Hero_coordinate().coord_y()-1]}|{[Hero_coordinate().coord_x()-1][Hero_coordinate().coord_y()-1]}|{map[i][j]}                             ')
+        print('        КАРТА                        УПРАВЛЕНИЕ        ')
+        print(' --------------                   w,s,a,d - ходьба     ')
+        print(f' |{map[x - 1][y + 1]}|{map[x][y + 1]}|{map[x + 1][y + 1]}                                                        ')
+        print(f' |{map[x - 1][y]}|{Hero}|{map[x + 1][y]}                             ')
+        print(f' |{map[x - 1][y - 1]}|{map[x][y - 1]}|{map[x + 1][y - 1]}                              ')
         print(f'                                                     ')
-        print(f'   Управление w,s,a,d - ходьба                       ')
+        print(f'  Инвентарь:                                          ')
+        print(f'  Текущие координаты {x}, {y}                         ')
         print(f' *****************************************************')
+
+    def cls(self):
+        os.system("CLS")
+
+
+
 if __name__ == '__main__':
     pass
 curent_user = User()
 GameProccess().intro(curent_user)
+# Карта
 map_new = []
+# экземпляр класса Героя
 pilligrim = HeroCoordinate()
+# список классов для генерации террирорий
+listterritory = []
+listterritory = complectteritory(listterritory)
 while True:
     user_new = User()
     ask = Menu().stand_menu()
     if ask == 1:
         user_new.input_data()
     elif ask == 2:
-        GameProccess().begin_game(map_new)
+        game = True
+        map_new = GameProccess().begin_game(map_new,listterritory)
     elif ask == 1:
         pass
     elif ask == 1:
@@ -171,46 +219,13 @@ while True:
         pass
 
     gameover = False
+    if game == True:
+        while gameover == False:
+            GameProccess().interface(map_new, pilligrim.coord_x(), pilligrim.coord_y())
+            pilligrim.step()
+            GameProccess().cls()
 
-    while gameover == False:
-        GameProccess.interface(map_new)
-        pilligrim.step()
-#       Hero_coordinate().step()
-#       Hero_coordinate.coord_y()
-#       Hero_coordinate.coord_x()
+    else:
+        break
 
 
-
-'''
-    a = Hero_coordinate()
-    #map = [[0 for x in range(10)] for y in range(10)]
-    map11 = []
-    title = []
-    title = complect_teritory(title)
-  
-    h = []
-    for i in range(0,100):
-        for j in range(0, 10):
-            for k in range(0, 10):
-                h.append(d1[j][k])
-    Menu().save_date(h, 'map_temp.txt')
-
-while True:
-    list_user = []
-    #Menu
-    ask = Menu().stand_menu(list_user)
-    if ask == 1:
-        Menu().data_user(list_user)
-    elif ask == 2:
-        pass
-    elif ask == 3:
-        Menu().save_date()
-    elif ask == 4:
-        world_map = Menu().load_data()
-    elif ask == 5:
-        global_map(map)
-    elif ask == 6:
-        os.exit
-
-    print(world_map)
-'''
