@@ -1,58 +1,29 @@
 import json
-import random
-#from game import
-# Классы персонажей
+import random as r
+import pickle
+from user import User
+import globalmap
+#Классы персонажей
 
-# Классы инвентаря
+class GlobalMap(object):
+    def __init__(self, map=[]):
+        self.map = map
 
-# Классы территорий
-class Territory(object):
-    # проходимость местности и изменяемость при катаклизамах
-    def __init__(self, patency= 0,mutability =0):
-        self.patency = patency
-        self.mutability = mutability
+    def generate_new_map(self, map, title):
+        self.map = map
+        self.title = title
 
-    def __str__(self):
-        return (f'XXX')
+        for j in range(11):
+            d2 = []
+            for i in range(10):
+                item = random.choice(complect_teritory())
+                d2.append(item)
+            self.map.append(d2)
+            return (self.map)
 
-
-class Water(Territory):
-    def __init__(self, patency= 0, mutability= 0):
-        Territory.__init__(self, patency, mutability)
-        self.mutability = 1
-
-    def __str__(self):
-        return ('~~~')
-
-
-class Field(Territory):
-    def __init__(self, patency=1, mutability=1):
-        Territory.__init__(self, patency, mutability)
-        self.patency = 1
-        self.mutability = 1
-
-    def __str__(self):
-        return('===')
-
-
-# Классы Юзеров
-class UserIter(object):
-    def __init__(self, user_list, start= 0):
-        self.idx = start
-        self.user_list =user_list
-
-    def __next__(self):
-        self.idx = self.idx - 1
-        if self.idx - 1 >= len(self.user_list):
-            return(self.user_list[self.idx - 1])
-        raise StopIteration
-
-class User(object):
-    def __init__(self, user_list):
-        self.user_list = user_list
-
-    def __iter__(self):
-        return
+    def print_map(self):
+        for i in range(0, 10):
+            print(f'{self.map[i][0]}{self.map[i][1]}{self.map[i][2]}{self.map[i][3]}{self.map[i][4]}{self.map[i][5]}{self.map[i][6]}{self.map[i][7]}{self.map[i][8]}{self.map[i][9]}')
 
 
 # Классы обслуживающие
@@ -60,7 +31,7 @@ class Menu(object):
     def __init__(self):
         pass
 
-    def stand_menu(self, lusr):
+    def stand_menu(self):
         print(f'[1] - Заполнить профиль пользователя')
         print(f'[2] - Начать игру')
         print(f'[3] - Сохранить игру')
@@ -70,23 +41,19 @@ class Menu(object):
         x = (int(input('Выберите действие').lower()))
         return(x)
 
-    def data_user(self, lusr):
-        print(f'Список имеющихся пользователей: {lusr}')
-        real_user = input(f'Введите пожалуйста ваш ник.')
-        if real_user is lusr:
-            pass
-
+    def data_user(self, user):
+        pass
 
     def load_data(self):
-        with open("map_temple.txt", "r") as read_file:
-            data = json.load(read_file)
+        with open("file_sv", "rb") as read_file:
+            data = pickle.load(read_file)
         return(data)
 
     def save_date(self, massive, file_sv):
 
-        with open(file_sv, 'w', encoding='utf-8') as f:
-            json_string = json.dumps(massive)
-            f.write(json_string)
+        with open(file_sv, 'wb') as f:
+            pickle.dump(massive, f)
+            #f.write(strin)
 
     def return_to_game(self):
         pass
@@ -97,17 +64,37 @@ class Menu(object):
     def error(self):
         pass
 
-def global_map(map):
-    for i in range(0, 10):
-        print('---|---|---|---|---|---|---|---|---|---|')
-        print(f'{map[i]}|{map[i + 1]}|{map[i + 2]}|{map[i + 3]}|{map[i + 4]}|{map[i + 5]}|{map[i + 6]}|{map[i + 7]}|{map[i + 8]}|{map[i + 9]}')
-    print('---|---|---|---|---|---|---|---|---|---|')
+class Error(object):
+    def __init__(self, questionce, answer_string_yes, yes_answer, no_answer, answer_string_no,  error_answer, if_answer=0):
+        self.questionce = questionce
+        self.answer_string_yes = answer_string_yes
+        self.answer_string_no = answer_string_no
+        self.yes_answer = yes_answer
+        self.no_answer = no_answer
+        self.error_answer = error_answer
+# маркер разновидности проверки на ошибку ввода
+# 0 - без выхода если нет
+# 1 - выходом если нет
+        self.if_answer = if_answer
 
-class Hero_coordinate(object):
+    def processing_result(self):
+        if self.if_answer == 0:
+            query = input(f'{self.questionce}')
+            if query == self.yes_answer:
+                return(f'{self.answer_string_yes}')
+            elif query == 'exit':
+                os.exit()
+            elif query == self.no_answer:
+                return(f'{self.answer_string_no}')
+            else:
+                return (f'{self.error_answer}')
+
+
+# Класс перемещения героя по карте
+class HeroCoordinate(object):
     def __init__(self, x=0, y=0):
         self.x = x
         self.y = y
-
 
     def coord_x(self):
         return(self.x)
@@ -116,6 +103,8 @@ class Hero_coordinate(object):
         return(self.y)
 
     def step(self):
+        print('Управление:')
+        print()
         st = input('Куда вы пойдете w,s,a,d')
         if st == 'w':
             self.y = self.y + 1
@@ -128,57 +117,83 @@ class Hero_coordinate(object):
         elif st == 'd':
             self.x = self.x + 1
 
+# Классы инвентаря
+class GameProccess(object):
+    def __init__(self):
+        pass
 
-class GlobalMap(object):
-    def __init__(self, w_map):
-        self.w_map = w_map
+    def intro(self, curent_user):
+        self.curent_user = curent_user
+        print('Добро пожаловать в R.P.G')
+        print('В нелегкое время встретились мы НЕЗНАКОМЕЦ')
+        print('Как тебя зовут достойный представитель человечества?')
+        self.curent_user.input_data()
+        print(f'Итак. Добро пожаловать.')
+        print(f'текущий статус {self.curent_user.__str__()}')
+        print('***********************************************')
+        print('Что делаем?')
+        return ()
 
-    def paint(self):
-        for i in range(0, 9):
-            print(f'{self.w_map[0]} {self.w_map[1]} {self.w_map[2]} {self.w_map[3]} {self.w_map[4]} {self.w_map[5]} {self.w_map[6]} {self.w_map[7]} {self.w_map[8]} {self.w_map[9]}')
-
-
-    def picture_map(self):
-
-        for i in range(0 , 9):
-            for j in range(0, 9):
-                self.w_map[i][j] = random.choice([Field(patency=1, mutability=1), Water(patency=0, mutability=0)])
-        return self.w_map
-
-def complect_teritory(title):
-    title.append(Water())
-    title.append(Field())
-    return title
+    def begin_game(self, map_new_gl):
+        self.map_new_gl = map_new_gl
+        map_new_gl = GlobalMap().generate_new_map(map_new)
 
 
+    def interface(self, map):
+        self.map = map
+        print('******************************************************')
+        print('        КАРТА                        ИНВЕНТАРЬ        ')
+        print(' --------------    [{}]                               ')
+        print(f' |{map[Hero_coordinate().coord_x()-1][Hero_coordinate().coord_y()+1]}|{map[Hero_coordinate().coord_x()][Hero_coordinate().coord_y()+1]}|{map[Hero_coordinate().coord_x()+1][Hero_coordinate().coord_y()+1]}                                                        ')
+        print(f' |{map[Hero_coordinate().coord_x()-1][Hero_coordinate().coord_y()]}|{map[Hero_coordinate().coord_x()][Hero_coordinate().coord_y()]}|{[Hero_coordinate().coord_x()+1][Hero_coordinate().coord_y()]}                             ')
+        print(f' |{map[Hero_coordinate().coord_x()-1][Hero_coordinate().coord_y()-1]}|{[Hero_coordinate().coord_x()-1][Hero_coordinate().coord_y()-1]}|{map[i][j]}                             ')
+        print(f'                                                     ')
+        print(f'   Управление w,s,a,d - ходьба                       ')
+        print(f' *****************************************************')
 if __name__ == '__main__':
     pass
+curent_user = User()
+GameProccess().intro(curent_user)
+map_new = []
+pilligrim = HeroCoordinate()
+while True:
+    user_new = User()
+    ask = Menu().stand_menu()
+    if ask == 1:
+        user_new.input_data()
+    elif ask == 2:
+        GameProccess().begin_game(map_new)
+    elif ask == 1:
+        pass
+    elif ask == 1:
+        pass
+    elif ask == 1:
+        pass
+
+    gameover = False
+
+    while gameover == False:
+        GameProccess.interface(map_new)
+        pilligrim.step()
+#       Hero_coordinate().step()
+#       Hero_coordinate.coord_y()
+#       Hero_coordinate.coord_x()
+
+
+
+'''
     a = Hero_coordinate()
     #map = [[0 for x in range(10)] for y in range(10)]
     map11 = []
     title = []
     title = complect_teritory(title)
-
-    d1 = []
-    for j in range(10):
-        d2 = []
-        for i in range(10):
-            item = random.choice(title)
-            d2.append(item)
-        d1.append(d2)
-
-
-    for i in range(0,10):
-        print(f'{d1[i][0]}{d1[i][1]}{d1[i][2]}{d1[i][3]}{d1[i][4]}{d1[i][5]}{d1[i][6]}{d1[i][7]}{d1[i][8]}{d1[i][9]}')
-
-    Menu().save_date(d1, 'map_temp.json')
-
-
-
-
-
-
-"""
+  
+    h = []
+    for i in range(0,100):
+        for j in range(0, 10):
+            for k in range(0, 10):
+                h.append(d1[j][k])
+    Menu().save_date(h, 'map_temp.txt')
 
 while True:
     list_user = []
@@ -198,4 +213,4 @@ while True:
         os.exit
 
     print(world_map)
-"""
+'''
