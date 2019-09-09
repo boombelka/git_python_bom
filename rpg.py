@@ -91,6 +91,7 @@ class HeroCoordinate(object):
     def __init__(self, x=10, y=10, inventar_=[]):
         self.x = x
         self.y = y
+        # не пришей рукав (переделать однозначно)
         self.inventar_ = inventar_
 
     def coord_x(self):
@@ -98,7 +99,7 @@ class HeroCoordinate(object):
 
     def coord_y(self):
         return(self.y)
-
+# перемещение по карте из окна игры
     def step(self):
         st = input('Куда вы пойдете w,s,a,d\n').lower()
         if st == 'w':
@@ -132,10 +133,10 @@ class HeroCoordinate(object):
                 print('**********************')
             else:
                 self.x = self.x + 1
-
+# вызов меню
         elif st == 'menu':
             Menu().stand_menu()
-
+# подбор предмета для инвентаря
         elif st == 'o':
             if type(map_new[self.x][self.y]) == type(FieldCoin()):
                 self.inventar_.append(Coin())
@@ -151,7 +152,7 @@ class HeroCoordinate(object):
 class GameProccess(object):
     def __init__(self):
         pass
-
+# начальная заставка
     def intro(self, curent_user):
         self.curent_user = curent_user
         print('Добро пожаловать в R.P.G')
@@ -161,16 +162,16 @@ class GameProccess(object):
         print(f'Итак. Добро пожаловать.')
         print(f'текущий статус {self.curent_user.__str__()}')
         print('***********************************************')
-        print('Что делаем?')
+        print('Что делаем? ')
         return ()
-
+# Начальные приготоваления для игры, генерация карты
     def begin_game(self, map_new_gl, listterritor):
         self.listterritor = listterritory
         self.map_new_gl = map_new_gl
 
         map_new_gl = GlobalMap(map_new).generate_new_map(map_new, listterritor)
         return (map_new_gl)
-
+# отрисовка интерфейса
     def interface(self, map, x,  y):
         self.map = map
         inventar = HeroCoordinate().inventar_
@@ -205,10 +206,10 @@ class GameProccess(object):
         print(f'  Текущие координаты {x}, {y}                         ')
         print(f'  Территория: {terrain}, под ногами: {godsend}                                                  ')
         print(f' *****************************************************')
-
+# попытка очистки экрана (не работает)
     def cls(self):
         os.system("CLS")
-
+# прописка логики работы с МЕНЮ
     def menu_logika(self, ask, map, game):
         if ask == 1:
             user_new.input_data()
@@ -241,13 +242,18 @@ listterritory = complectteritory(listterritory)
 while True:
     game = True
     user_new = User()
+    # загрука меню вначале игры
     ask = Menu().stand_menu()
+    # отработка ответов из меню в начале игры
     GameProccess().menu_logika(ask, map_new, game)
     gameover = False
     if game == True:
         while gameover == False:
+            #отрисовки главного окна
             GameProccess().interface(map_new, pilligrim.coord_x(), pilligrim.coord_y())
+            # запрос на перемещение героя
             pilligrim.step()
+            # очистка окна (не получилось)
             GameProccess().cls()
 
     else:
