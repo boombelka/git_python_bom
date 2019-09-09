@@ -2,7 +2,8 @@ import pickle
 import random as r
 from user import User
 from territory import complectteritory, Mountin, Water, Field, FieldMigth, FieldRubin, FieldCoin, Forest
-import os
+import sys
+from inventory import Coin, Rubin, Might
 #Классы персонажей
 
 class GlobalMap(object):
@@ -39,16 +40,15 @@ class Menu(object):
         print(f'[2] - Начать игру')
         print(f'[3] - Сохранить игру')
         print(f'[4] - Загрузить игру')
-        print(f'[5] - Вернуться в игру')
-        print(f'[6] - Выйти из игры')
+        print(f'[5] - Выйти из игры')
         x = (int(input('Выберите действие').lower()))
         return(x)
 
     def data_user(self, user):
         pass
 
-    def load_data(self):
-        with open("file_sv", "rb") as read_file:
+    def load_data(self, file_sv):
+        with open(file_sv, "rb") as read_file:
             data = pickle.load(read_file)
         return(data)
 
@@ -58,15 +58,8 @@ class Menu(object):
             pickle.dump(massive, f)
             #f.write(strin)
 
-    def return_to_game(self):
-        pass
 
-    def game_exit(self):
-        pass
-
-    def error(self):
-        pass
-
+#Класс обработки ошибок при ввводе
 class Error(object):
     def __init__(self, questionce, answer_string_yes, yes_answer, no_answer, answer_string_no,  error_answer, if_answer=0):
         self.questionce = questionce
@@ -107,7 +100,7 @@ class HeroCoordinate(object):
         return(self.y)
 
     def step(self):
-        st = input('Куда вы пойдете w,s,a,d\n')
+        st = input('Куда вы пойдете w,s,a,d\n').lower()
         if st == 'w':
             if type(map_new[self.x][self.y + 1]) == type(Water()) or type(map_new[self.x][self.y + 1]) == type(Mountin()):
                 print('**********************')
@@ -143,6 +136,16 @@ class HeroCoordinate(object):
         elif st == 'menu':
             Menu().stand_menu()
 
+        elif st == 'o':
+            if type(map_new[self.x][self.y]) == type(FieldCoin()):
+                self.inventar_.append(Coin())
+                map_new[self.x][self.y] = Field()
+            elif type(map_new[self.x][self.y]) == type(FieldRubin()):
+                self.inventar_.append(Rubin())
+                map_new[self.x][self.y] = Field()
+            elif type(map_new[self.x][self.y]) == type(FieldMigth()):
+                self.inventar_.append(Might())
+                map_new[self.x][self.y] = Field()
 
 # Классы обработки событий
 class GameProccess(object):
@@ -168,9 +171,9 @@ class GameProccess(object):
         map_new_gl = GlobalMap(map_new).generate_new_map(map_new, listterritor)
         return (map_new_gl)
 
-    def interface(self, map, x ,y):
+    def interface(self, map, x,  y):
         self.map = map
-        s = 'XXX'
+        inventar = HeroCoordinate().inventar_
         Hero = ' H '
         if type(map_new[x][y]) == type(Forest()):
             terrain = Forest().terranian
@@ -181,6 +184,9 @@ class GameProccess(object):
         elif type(map_new[x][y]) == type(FieldCoin()):
             terrain = FieldCoin().terranian
             godsend = FieldCoin().godsend
+        elif type(map_new[x][y]) == type(FieldRubin()):
+            terrain = FieldRubin().terranian
+            godsend = FieldRubin().godsend
         elif type(map_new[x][y]) == type(FieldMigth()):
             terrain = FieldMigth().terranian
             godsend = FieldMigth().godsend
@@ -195,13 +201,29 @@ class GameProccess(object):
         print(f' |{map[x - 1][y]}|{Hero}|{map[x + 1][y]}                   o - подобрать находку                           ')
         print(f' |{map[x - 1][y - 1]}|{map[x][y - 1]}|{map[x + 1][y - 1]}                              ')
         print(f'                                                     ')
-        print(f'  Инвентарь:                                          ')
+        print(f'  Инвентарь: {inventar}                                          ')
         print(f'  Текущие координаты {x}, {y}                         ')
         print(f'  Территория: {terrain}, под ногами: {godsend}                                                  ')
         print(f' *****************************************************')
 
     def cls(self):
         os.system("CLS")
+
+    def menu_logika(self, ask, map, game):
+        if ask == 1:
+            user_new.input_data()
+        elif ask == 2:
+            game = game
+            map = GameProccess().begin_game(map_new, listterritory)
+            return (game, map)
+        elif ask == 3:
+            Menu().save_date(map_new, 'data.txt')
+        elif ask == 4:
+            map = Menu().load_data('data.txt')
+            return (map)
+        elif ask == 5:
+            print('До новых встреч!!!')
+            sys.exit()
 
 
 
@@ -217,20 +239,10 @@ pilligrim = HeroCoordinate()
 listterritory = []
 listterritory = complectteritory(listterritory)
 while True:
+    game = True
     user_new = User()
     ask = Menu().stand_menu()
-    if ask == 1:
-        user_new.input_data()
-    elif ask == 2:
-        game = True
-        map_new = GameProccess().begin_game(map_new,listterritory)
-    elif ask == 1:
-        pass
-    elif ask == 1:
-        pass
-    elif ask == 1:
-        pass
-
+    GameProccess().menu_logika(ask, map_new, game)
     gameover = False
     if game == True:
         while gameover == False:
