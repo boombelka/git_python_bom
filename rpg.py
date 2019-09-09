@@ -3,6 +3,7 @@ import random as r
 from user import User
 from territory import complectteritory, Mountin, Water, Field, FieldMigth, FieldRubin, FieldCoin, Forest
 import sys
+import os
 from inventory import Coin, Rubin, Might
 #Классы персонажей
 
