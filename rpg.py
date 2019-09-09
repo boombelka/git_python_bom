@@ -161,7 +161,7 @@ class GameProccess(object):
         print(f'Итак. Добро пожаловать.')
         print(f'текущий статус {self.curent_user.__str__()}')
         print('***********************************************')
-        print('Что делаем?')
+        print('Что делаем? ')
         return ()
 
     def begin_game(self, map_new_gl, listterritor):
